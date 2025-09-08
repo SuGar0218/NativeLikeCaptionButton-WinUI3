@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

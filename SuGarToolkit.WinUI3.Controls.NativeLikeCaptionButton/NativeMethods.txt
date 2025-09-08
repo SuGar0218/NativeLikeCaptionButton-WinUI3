@@ -1,0 +1,14 @@
+﻿GetWindowLong
+SetWindowLong
+GetWindowLongPtr
+SetWindowLongPtr
+CallWindowProc
+ScreenToClient
+SetWindowSubclass
+RemoveWindowSubclass
+DefSubclassProc
+FindWindowEx
+IsWindow
+GetLastError
+SetLastError
+WNDPROC

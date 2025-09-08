@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:CaptionButton
+    x:Class="SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton.CaptionCloseButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <local:CaptionButton.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/CaptionButton_themeresource.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <StaticResource x:Key="CaptionButtonHoverBackground" ResourceKey="CaptionCloseButtonHoverBackground" />
+            <StaticResource x:Key="CaptionButtonPressedBackground" ResourceKey="CaptionCloseButtonPressedBackground" />
+            <StaticResource x:Key="CaptionButtonHoverForeground" ResourceKey="CaptionCloseButtonHoverForeground" />
+            <StaticResource x:Key="CaptionButtonPressedForeground" ResourceKey="CaptionCloseButtonPressedForeground" />
+        </ResourceDictionary>
+    </local:CaptionButton.Resources>
+
+    <FontIcon FontSize="{StaticResource CaptionButtonIconFontSize}" Glyph="{StaticResource CaptionCloseButtonGlyph}" />
+
+</local:CaptionButton>

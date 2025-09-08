@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/CaptionButton_themeresource.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="CaptionButtonDefaultStyle" TargetType="local:CaptionButton">
+        <Setter Property="Width" Value="{StaticResource CaptionButtonWidth}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CaptionButton">
+                    <Border
+                        x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.BackgroundTransition>
+                            <BrushTransition x:Name="BorderBackgroundTransition" Duration="0:0:0.1" />
+                        </Border.BackgroundTransition>
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            IsTabStop="False" />
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="PointerExit" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource CaptionButtonHoverBackground}" />
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource CaptionButtonHoverForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="PointerPressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Border.Background" Value="{ThemeResource CaptionButtonPressedBackground}" />
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource CaptionButtonPressedForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource CaptionButtonDisabledForeground}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ActiveStates">
+                                <VisualState x:Name="Active" />
+                                <VisualState x:Name="Inactive">
+                                    <VisualState.Setters>
+                                        <Setter Target="ContentPresenter.Opacity" Value="{ThemeResource CaptionButtonInactiveOpacity}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource CaptionButtonDefaultStyle}" TargetType="local:CaptionButton" />
+
+</ResourceDictionary>

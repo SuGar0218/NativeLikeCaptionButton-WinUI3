@@ -1,0 +1,13 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/CaptionButton.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/CaptionButtonBar.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/NativeLikeTitleBar.xaml" />
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/NativeLikeWindowContent.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

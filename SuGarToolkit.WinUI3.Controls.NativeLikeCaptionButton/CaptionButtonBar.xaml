@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton/CaptionButtonBar_themeresource.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="local:CaptionButtonBar">
+        <Setter Property="MinHeight" Value="{StaticResource CaptionStandardHeight}" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Spacing" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CaptionButtonBar">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal" Spacing="{TemplateBinding Spacing}">
+                            <local:CaptionMinimizeButton x:Name="MinimizeButton" IsEnabled="{TemplateBinding IsMinimizeButtonEnabled}" />
+                            <Grid x:Name="MaximizeAndRestoreButtonArea" Visibility="{TemplateBinding MaximizeButtonVisibility}">
+                                <local:CaptionRestoreButton
+                                    x:Name="RestoreButton"
+                                    IsEnabled="{TemplateBinding IsMaximizeButtonEnabled}"
+                                    Visibility="Collapsed" />
+                                <local:CaptionMaximizeButton
+                                    x:Name="MaximizeButton"
+                                    IsEnabled="{TemplateBinding IsMaximizeButtonEnabled}"
+                                    Visibility="Visible" />
+                            </Grid>
+                            <local:CaptionCloseButton x:Name="CloseButton" IsEnabled="{TemplateBinding IsCloseButtonEnabled}" />
+                        </StackPanel>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="WindowStates">
+                                <VisualState x:Name="WindowRestored" />
+                                <VisualState x:Name="WindowMaximized">
+                                    <VisualState.Setters>
+                                        <Setter Target="RestoreButton.Visibility" Value="Visible" />
+                                        <Setter Target="MaximizeButton.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
