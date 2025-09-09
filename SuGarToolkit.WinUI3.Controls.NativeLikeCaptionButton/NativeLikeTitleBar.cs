@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton.Helpers;
 using SuGarToolkit.WinUI3.SourceGenerators;
 
+using System;
 using System.ComponentModel;
 
 using Windows.Foundation;
@@ -43,6 +44,12 @@ public partial class NativeLikeTitleBar : ContentControl
     public partial Visibility CloseButtonVisibility { get; set; }
 
     [DependencyProperty(DefaultValue = true)]
+    public partial bool IsBackButtonEnabled { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
+    public partial bool IsPaneToggleButtonEnabled { get; set; }
+
+    [DependencyProperty(DefaultValue = true)]
     public partial bool IsMinimizeButtonEnabled { get; set; }
 
     [DependencyProperty(DefaultValue = true)]
@@ -71,10 +78,12 @@ public partial class NativeLikeTitleBar : ContentControl
         new PropertyMetadata(false)
     );
 
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? MinimizeButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? MaximizeButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? RestoreButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? CloseButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, CancelEventArgs>? MinimizeButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, CancelEventArgs>? MaximizeButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, CancelEventArgs>? RestoreButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, CancelEventArgs>? CloseButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, EventArgs>? BackButtonClick;
+    public event TypedEventHandler<NativeLikeTitleBar, EventArgs>? PaneToggleButtonClick;
 
     private CaptionButtonBar CaptionButtonBar { get; set; }
     private Button BackButton { get; set; }
@@ -95,6 +104,23 @@ public partial class NativeLikeTitleBar : ContentControl
         HeaderArea = (FrameworkElement) GetTemplateChild(nameof(HeaderArea));
         CenterArea = (FrameworkElement) GetTemplateChild(nameof(CenterArea));
         FooterArea = (FrameworkElement) GetTemplateChild(nameof(FooterArea));
+
+        BackButton.Click += OnBackButtonClick;
+        PaneToggleButton.Click += OnPaneToggleButtonClick;
+
+        HeaderArea.SizeChanged += OnPartSizeChanged;
+        CenterArea.SizeChanged += OnPartSizeChanged;
+        FooterArea.SizeChanged += OnPartSizeChanged;
+    }
+
+    private void OnBackButtonClick(object sender, RoutedEventArgs e)
+    {
+        BackButtonClick?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnPaneToggleButtonClick(object sender, RoutedEventArgs e)
+    {
+        PaneToggleButtonClick?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -102,23 +128,17 @@ public partial class NativeLikeTitleBar : ContentControl
         if (OwnerWindow is null)
             return;
 
-        nonClientRegionHelper = new TitleBarNonClientRegionHelper(OwnerWindow);
-        OwnerWindow!.SetTitleBar(this);
+        OwnerWindow.SetTitleBar(this);
+        titleBarPassthroughHelper = new TitleBarPassthroughHelper(OwnerWindow);
         CollectNonClientRegionPassthroughHitTestVisibleElements(this);
-        nonClientRegionHelper
-            .Add(NonClientRegionKind.Minimize, CaptionButtonBar.MinimizeButton)
-            .Add(NonClientRegionKind.Maximize, CaptionButtonBar.MaximizeAndRestoreButtonArea)
-            .Add(NonClientRegionKind.Close, CaptionButtonBar.CloseButton)
-            .Add(NonClientRegionKind.Passthrough, CaptionButtonBar, BackButton, PaneToggleButton)
-            .Refresh(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough)
-            .Apply(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough);
+        titleBarPassthroughHelper.Add(BackButton, PaneToggleButton, CaptionButtonBar).Refresh().Apply();
     }
 
     private void CollectNonClientRegionPassthroughHitTestVisibleElements(DependencyObject parent)
     {
         if (parent is UIElement element && GetIsHitTestVisibleInTitleBar(parent))
         {
-            nonClientRegionHelper.Add(NonClientRegionKind.Passthrough, element);
+            titleBarPassthroughHelper.Add(element);
             return;
         }
         int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
@@ -127,7 +147,7 @@ public partial class NativeLikeTitleBar : ContentControl
             DependencyObject dependencyObject = VisualTreeHelper.GetChild(parent, i);
             if (dependencyObject is UIElement child && GetIsHitTestVisibleInTitleBar(child))
             {
-                nonClientRegionHelper.Add(NonClientRegionKind.Passthrough, child);
+                titleBarPassthroughHelper.Add(child);
                 return;
             }
             CollectNonClientRegionPassthroughHitTestVisibleElements(dependencyObject);
@@ -138,35 +158,30 @@ public partial class NativeLikeTitleBar : ContentControl
 
     private void OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
-        if (hasPartSizeChanged || nonClientRegionHelper is null)
-        {
-            hasPartSizeChanged = false;
+        if (titleBarPassthroughHelper is null)
             return;
-        }
 
-        nonClientRegionHelper
-            .Refresh(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough)
-            .Apply(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough);
+        titleBarPassthroughHelper.Refresh().Apply();
     }
 
     private void OnPartSizeChanged(object sender, SizeChangedEventArgs e)
     {
-        hasPartSizeChanged = true;
-
-        if (nonClientRegionHelper is null)
+        if (titleBarPassthroughHelper is null)
             return;
 
-        nonClientRegionHelper
-            .Refresh(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough)
-            .Apply(NonClientRegionKind.Minimize, NonClientRegionKind.Maximize, NonClientRegionKind.Close, NonClientRegionKind.Passthrough);
+        titleBarPassthroughHelper.Refresh().Apply();
     }
 
     private void OnOwnerWindowChanging(Window oldValue, Window newValue)
     {
-        oldValue?.Activated -= OnOwnerWindowActivated;
-        if (newValue is null)
-            return;
-        newValue.Activated += OnOwnerWindowActivated;
+        if (oldValue is not null)
+        {
+            oldValue.Activated -= OnOwnerWindowActivated;
+        }
+        if (newValue is not null)
+        {
+            newValue.Activated += OnOwnerWindowActivated;
+        }
     }
 
     private void OnOwnerWindowActivated(object sender, WindowActivatedEventArgs args)
@@ -187,5 +202,5 @@ public partial class NativeLikeTitleBar : ContentControl
         self.OnOwnerWindowChanging((Window) e.OldValue, (Window) e.NewValue);
     }
 
-    private TitleBarNonClientRegionHelper nonClientRegionHelper;
+    private TitleBarPassthroughHelper titleBarPassthroughHelper;
 }

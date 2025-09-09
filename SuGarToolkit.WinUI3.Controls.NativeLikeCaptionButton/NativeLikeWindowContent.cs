@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 
 using SuGarToolkit.WinUI3.SourceGenerators;
 
+using System;
 using System.ComponentModel;
 
 using Windows.Foundation;
@@ -40,10 +41,10 @@ public partial class NativeLikeWindowContent : ContentControl
     [DependencyProperty]
     public partial UIElement TitleBarArea { get; set; }
 
-    public event TypedEventHandler<NativeLikeWindowContent, CancelEventArgs>? MinimizeButtonClick;
-    public event TypedEventHandler<NativeLikeWindowContent, CancelEventArgs>? MaximizeButtonClick;
-    public event TypedEventHandler<NativeLikeWindowContent, CancelEventArgs>? RestoreButtonClick;
-    public event TypedEventHandler<NativeLikeWindowContent, CancelEventArgs>? CloseButtonClick;
+    public event TypedEventHandler<NativeLikeWindowContent, EventArgs>? MinimizeButtonClick;
+    public event TypedEventHandler<NativeLikeWindowContent, EventArgs>? MaximizeButtonClick;
+    public event TypedEventHandler<NativeLikeWindowContent, EventArgs>? RestoreButtonClick;
+    public event TypedEventHandler<NativeLikeWindowContent, EventArgs>? CloseButtonClick;
 
     private CaptionButtonBar CaptionButtonBar { get; set; }
 
@@ -56,18 +57,5 @@ public partial class NativeLikeWindowContent : ContentControl
         CaptionButtonBar.MaximizeButtonClick += (sender, args) => MaximizeButtonClick?.Invoke(this, args);
         CaptionButtonBar.RestoreButtonClick += (sender, args) => RestoreButtonClick?.Invoke(this, args);
         CaptionButtonBar.CloseButtonClick += (sender, args) => CloseButtonClick?.Invoke(this, args);
-    }
-
-    private void SetTitleBarArea()
-    {
-        if (OwnerWindow is null)
-            return;
-
-    }
-
-    private static void OnTitleBarDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        NativeLikeWindowContent self = (NativeLikeWindowContent) d;
-        self.SetTitleBarArea();
     }
 }

@@ -14,63 +14,6 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <my:NativeLikeTitleBar
-            x:Name="TitleBarArea"
-            Grid.Row="0"
-            Height="42"
-            OwnerWindow="{x:Bind}">
-
-            <my:NativeLikeTitleBar.CustomHeader>
-                <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Style="{ThemeResource CaptionTextBlockStyle}"
-                        Text="NativeLikeTitleBar" />
-                    <Rectangle Width="{ThemeResource TitleBarLeftPaddingWidth}" />
-                    <MenuBar my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True">
-                        <MenuBarItem Title="File" />
-                        <MenuBarItem Title="Edit" />
-                        <MenuBarItem Title="View" />
-                        <MenuBarItem Title="Tool" />
-                    </MenuBar>
-                </StackPanel>
-            </my:NativeLikeTitleBar.CustomHeader>
-
-            <my:NativeLikeTitleBar.CustomFooter>
-                <StackPanel my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True" Orientation="Horizontal">
-                    <my:CaptionButton Padding="8" VerticalAlignment="Stretch">
-                        <PersonPicture Width="30" />
-                        <my:CaptionButton.Flyout>
-                            <Flyout>
-                                <TextBlock Text="User Account" />
-                            </Flyout>
-                        </my:CaptionButton.Flyout>
-                    </my:CaptionButton>
-                    <my:CaptionButton VerticalAlignment="Stretch">
-                        <FontIcon FontSize="16" Glyph="&#xE793;" />
-                    </my:CaptionButton>
-                    <my:CaptionButton VerticalAlignment="Stretch">
-                        <FontIcon FontSize="16" Glyph="&#xE713;" />
-                    </my:CaptionButton>
-                    <my:CaptionButton VerticalAlignment="Stretch">
-                        <FontIcon FontSize="16" Glyph="&#xE897;" />
-                    </my:CaptionButton>
-                    <my:CaptionButton VerticalAlignment="Stretch">
-                        <FontIcon FontSize="{StaticResource CaptionTextBlockFontSize}" Glyph="&#xE740;" />
-                    </my:CaptionButton>
-                </StackPanel>
-            </my:NativeLikeTitleBar.CustomFooter>
-
-            <AutoSuggestBox Width="400" my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True" />
-        </my:NativeLikeTitleBar>
-
-
-    </Grid>
+    <Frame Loaded="Frame_Loaded" />
 
 </Window>

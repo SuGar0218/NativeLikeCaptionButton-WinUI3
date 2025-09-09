@@ -1,18 +1,40 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.ViewModels;
 
-namespace SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views
+namespace SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views;
+
+internal sealed partial class MainPage : Page
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainPage : Page
+    public MainPage()
     {
-        public MainPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+    public class NavigationParameter
+    {
+        public required Window OwnerWindow { get; set; }
+
+        public required TitleBarElementViewModel ViewModel { get; set; }
+    }
+
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        NavigationParameter parameter = (NavigationParameter) e.Parameter;
+        ViewModel = parameter.ViewModel;
+        OwnerWindow = parameter.OwnerWindow;
+
+        base.OnNavigatedTo(e);
+    }
+
+    private TitleBarElementViewModel ViewModel { get; set; }
+
+    private Window OwnerWindow { get; set; }
+
+    private void TitleBarArea_PaneToggleButtonClick(Controls.NativeLikeCaptionButton.NativeLikeTitleBar sender, System.EventArgs args)
+    {
+        RootNavigationView.IsPaneOpen = !RootNavigationView.IsPaneOpen;
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 
 using SuGarToolkit.WinUI3.SourceGenerators;
 
+using System;
 using System.ComponentModel;
 
 using Windows.Foundation;
@@ -22,19 +23,19 @@ public partial class CaptionButtonBar : Control
         DefaultStyleKey = typeof(CaptionButtonBar);
     }
 
-    [DependencyProperty(DefaultValue = Visibility.Visible)]
+    [DependencyProperty(DefaultValue = Visibility.Visible, PropertyChanged = nameof(OnMinimizableDependencyPropertyChanged))]
     public partial Visibility MinimizeButtonVisibility { get; set; }
 
-    [DependencyProperty(DefaultValue = Visibility.Visible)]
+    [DependencyProperty(DefaultValue = Visibility.Visible, PropertyChanged = nameof(OnMaximizableDependencyPropertyChanged))]
     public partial Visibility MaximizeButtonVisibility { get; set; }
 
     [DependencyProperty(DefaultValue = Visibility.Visible)]
     public partial Visibility CloseButtonVisibility { get; set; }
 
-    [DependencyProperty(DefaultValue = true)]
+    [DependencyProperty(DefaultValue = true, PropertyChanged = nameof(OnMinimizableDependencyPropertyChanged))]
     public partial bool IsMinimizeButtonEnabled { get; set; }
 
-    [DependencyProperty(DefaultValue = true)]
+    [DependencyProperty(DefaultValue = true, PropertyChanged = nameof(OnMaximizableDependencyPropertyChanged))]
     public partial bool IsMaximizeButtonEnabled { get; set; }
 
     [DependencyProperty(DefaultValue = true)]
@@ -44,14 +45,14 @@ public partial class CaptionButtonBar : Control
     public partial double Spacing { get; set; }
 
     [DependencyProperty(PropertyChanged = nameof(OnOwnerWindowDependencyPropertyChanged))]
-    public partial Window OwnerWindow { get; set; }
+    public partial Window? OwnerWindow { get; set; }
 
     private OverlappedPresenter? OwnerWindowPresenter { get; set; }
 
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? MinimizeButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? MaximizeButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? RestoreButtonClick;
-    public event TypedEventHandler<CaptionButtonBar, CancelEventArgs>? CloseButtonClick;
+    public event TypedEventHandler<CaptionButtonBar, EventArgs>? MinimizeButtonClick;
+    public event TypedEventHandler<CaptionButtonBar, EventArgs>? MaximizeButtonClick;
+    public event TypedEventHandler<CaptionButtonBar, EventArgs>? RestoreButtonClick;
+    public event TypedEventHandler<CaptionButtonBar, EventArgs>? CloseButtonClick;
 
     public CaptionMinimizeButton MinimizeButton { get; private set; }
     public CaptionMaximizeButton MaximizeButton { get; private set; }
@@ -77,41 +78,25 @@ public partial class CaptionButtonBar : Control
 
     private void OnMinimizeButtonClicked(object sender, RoutedEventArgs e)
     {
-        CancelEventArgs args = new();
-        MinimizeButtonClick?.Invoke(this, args);
-        if (args.Cancel)
-            return;
-
+        MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
         OwnerWindowPresenter?.Minimize();
     }
 
     private void OnMaximizeButtonClicked(object sender, RoutedEventArgs e)
     {
-        CancelEventArgs args = new();
-        MinimizeButtonClick?.Invoke(this, args);
-        if (args.Cancel)
-            return;
-
+        MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
         OwnerWindowPresenter?.Maximize();
     }
 
     private void OnRestoreButtonClicked(object sender, RoutedEventArgs e)
     {
-        CancelEventArgs args = new();
-        MinimizeButtonClick?.Invoke(this, args);
-        if (args.Cancel)
-            return;
-
+        MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
         OwnerWindowPresenter?.Restore();
     }
 
     private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
     {
-        CancelEventArgs args = new();
-        MinimizeButtonClick?.Invoke(this, args);
-        if (args.Cancel)
-            return;
-
+        MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
         OwnerWindow?.Close();
     }
 
@@ -171,5 +156,21 @@ public partial class CaptionButtonBar : Control
     private static void OnOwnerWindowDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         ((CaptionButtonBar) d).OnOwnerWindowChanging((Window) e.OldValue, (Window) e.NewValue);
+    }
+
+    private static void OnMinimizableDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        CaptionButtonBar self = (CaptionButtonBar) d;
+        if (self.OwnerWindowPresenter is null)
+            return;
+        self.OwnerWindowPresenter.IsMinimizable = self.IsMinimizeButtonEnabled && self.MinimizeButtonVisibility is Visibility.Visible;
+    }
+
+    private static void OnMaximizableDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        CaptionButtonBar self = (CaptionButtonBar) d;
+        if (self.OwnerWindowPresenter is null)
+            return;
+        self.OwnerWindowPresenter.IsMaximizable = self.IsMaximizeButtonEnabled && self.MaximizeButtonVisibility is Visibility.Visible;
     }
 }

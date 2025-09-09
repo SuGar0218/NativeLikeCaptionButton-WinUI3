@@ -1,14 +1,292 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views"
+    xmlns:converters="using:SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="using:SuGarToolkit.Controls.Dialogs"
+    xmlns:local="using:SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:my="using:SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton"
     mc:Ignorable="d">
 
-    <Grid>
+    <Page.Resources>
+        <Style TargetType="Expander">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+    </Page.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <my:NativeLikeTitleBar
+            x:Name="TitleBarArea"
+            Grid.Row="0"
+            Height="{x:Bind ViewModel.TitleBarHeight}"
+            x:DefaultBindMode="OneWay"
+            BackButtonVisibility="{x:Bind ViewModel.IsBackButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            CloseButtonVisibility="{x:Bind ViewModel.IsCloseButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            IsBackButtonEnabled="{x:Bind ViewModel.IsBackButtonEnabled}"
+            IsCloseButtonEnabled="{x:Bind ViewModel.IsCloseButtonEnabled}"
+            IsMaximizeButtonEnabled="{x:Bind ViewModel.IsMaximizeButtonEnabled}"
+            IsMinimizeButtonEnabled="{x:Bind ViewModel.IsMinimizeButtonEnabled}"
+            IsPaneToggleButtonEnabled="{x:Bind ViewModel.IsPaneToggleButtonEnabled}"
+            MaximizeButtonVisibility="{x:Bind ViewModel.IsMaxmizeButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            MinimizeButtonVisibility="{x:Bind ViewModel.IsMinmizeButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            OwnerWindow="{x:Bind OwnerWindow, Mode=OneTime}"
+            PaneToggleButtonClick="TitleBarArea_PaneToggleButtonClick"
+            PaneToggleButtonVisibility="{x:Bind ViewModel.IsPaneToggleButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <my:NativeLikeTitleBar.CustomHeader>
+                <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+                    <StackPanel.ChildrenTransitions>
+                        <RepositionThemeTransition />
+                    </StackPanel.ChildrenTransitions>
+                    <TextBlock
+                        Padding="8,0"
+                        VerticalAlignment="Center"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="NativeLikeTitleBar"
+                        Visibility="{x:Bind ViewModel.IsCaptionTextVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <MenuBar
+                        VerticalAlignment="Center"
+                        my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
+                        IsEnabled="{x:Bind ViewModel.IsMenuBarEnabled}"
+                        Visibility="{x:Bind ViewModel.IsMenuBarVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <MenuBarItem Title="File">
+                            <MenuBarItem.Items>
+                                <MenuFlyoutItem Text="Save" />
+                                <MenuFlyoutItem Text="Save as" />
+                                <MenuFlyoutItem Text="Delete" />
+                            </MenuBarItem.Items>
+                        </MenuBarItem>
+                        <MenuBarItem Title="Edit">
+                            <MenuBarItem.Items>
+                                <MenuFlyoutItem Text="Copy" />
+                                <MenuFlyoutItem Text="Paste" />
+                                <MenuFlyoutItem Text="Cut" />
+                            </MenuBarItem.Items>
+                        </MenuBarItem>
+                        <MenuBarItem Title="View">
+                            <MenuBarItem.Items>
+                                <MenuFlyoutItem Text="Lorem" />
+                                <MenuFlyoutItem Text="Ipsum" />
+                            </MenuBarItem.Items>
+                        </MenuBarItem>
+                    </MenuBar>
+                </StackPanel>
+            </my:NativeLikeTitleBar.CustomHeader>
+
+            <my:NativeLikeTitleBar.CustomFooter>
+                <StackPanel my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True" Orientation="Horizontal">
+                    <my:CaptionButton
+                        Padding="8"
+                        VerticalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsPersonPictureEnabled}"
+                        Visibility="{x:Bind ViewModel.IsPersonPictureVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <PersonPicture Width="30" />
+                        <my:CaptionButton.Flyout>
+                            <dialogs:ContentDialogFlyout
+                                CloseButtonText="OK"
+                                DialogContent="Lorem ipsum dolor sit amet."
+                                DialogTitle="Username"
+                                PrimaryButtonText="Manage"
+                                SecondaryButtonText="Logout" />
+                        </my:CaptionButton.Flyout>
+                    </my:CaptionButton>
+                    <my:CaptionButton
+                        VerticalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsThemeToggleButtonEnabled}"
+                        Visibility="{x:Bind ViewModel.IsThemeToggleButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="16" Glyph="&#xE793;" />
+                    </my:CaptionButton>
+                    <my:CaptionButton
+                        VerticalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsSettingsButtonEnabled}"
+                        Visibility="{x:Bind ViewModel.IsSettingsButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="16" Glyph="&#xE713;" />
+                    </my:CaptionButton>
+                    <my:CaptionButton
+                        VerticalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsHelpButtonEnabled}"
+                        Visibility="{x:Bind ViewModel.IsHelpButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="16" Glyph="&#xE897;" />
+                        <my:CaptionButton.Flyout>
+                            <dialogs:ContentDialogFlyout
+                                CloseButtonText="OK"
+                                DialogContent="NativeLikeTitleBar is a custom title bar and its maximize button does not supports for Snap Layout on Windows 11."
+                                DialogTitle="Help" />
+                        </my:CaptionButton.Flyout>
+                    </my:CaptionButton>
+                    <my:CaptionButton
+                        VerticalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsFullScreenButtonEnabled}"
+                        Visibility="{x:Bind ViewModel.IsFullScreenButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="{StaticResource CaptionTextBlockFontSize}" Glyph="&#xE740;" />
+                    </my:CaptionButton>
+                </StackPanel>
+            </my:NativeLikeTitleBar.CustomFooter>
+
+            <AutoSuggestBox
+                Width="360"
+                my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
+                IsEnabled="{x:Bind ViewModel.IsAutoSuggestBoxEnabled}"
+                Visibility="{x:Bind ViewModel.IsAutoSuggestBoxVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </my:NativeLikeTitleBar>
+
+        <NavigationView
+            x:Name="RootNavigationView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsBackEnabled="False"
+            IsPaneToggleButtonVisible="False">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="NavigationViewItem" Icon="Placeholder" />
+                <NavigationViewItem Content="NavigationViewItem" Icon="Placeholder" />
+                <NavigationViewItem Content="NavigationViewItem" Icon="Placeholder" />
+                <NavigationViewItem Content="NavigationViewItem" Icon="Placeholder" />
+            </NavigationView.MenuItems>
+
+            <ScrollViewer>
+                <Grid
+                    Margin="36"
+                    x:DefaultBindMode="TwoWay"
+                    RowSpacing="16">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox Header="Suggested title bar height" SelectedItem="{x:Bind ViewModel.TitleBarHeight}">
+                        <x:Double>30</x:Double>
+                        <x:Double>32</x:Double>
+                        <x:Double>36</x:Double>
+                        <x:Double>42</x:Double>
+                        <x:Double>48</x:Double>
+                        <x:Double>56</x:Double>
+                    </ComboBox>
+
+                    <Grid Grid.Row="1" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Spacing="8">
+                            <StackPanel.ChildrenTransitions>
+                                <RepositionThemeTransition />
+                            </StackPanel.ChildrenTransitions>
+
+                            <Expander Header="TitleBackButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsBackButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsBackButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="TitleBarPaneToggleButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsPaneToggleButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsPaneToggleButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="TitleBarCaptionText">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsCaptionTextVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="TitleBarMenuBar">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsMenuBarEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsMenuBarVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="AutoSuggestBox">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsAutoSuggestBoxEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsAutoSuggestBoxVisible}" />
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            x:DefaultBindMode="TwoWay"
+                            Spacing="8">
+
+                            <StackPanel.ChildrenTransitions>
+                                <RepositionThemeTransition />
+                            </StackPanel.ChildrenTransitions>
+
+                            <Expander Header="CloseButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsCloseButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsCloseButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="MaximizeButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsMaximizeButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsMaxmizeButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="MinimizeButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsMinimizeButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsMinmizeButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="FullScreenButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsFullScreenButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsFullScreenButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="HelpButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsHelpButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsHelpButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="SettingsButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsSettingsButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsSettingsButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="ThemeToggleButton">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsThemeToggleButtonEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsThemeToggleButtonVisible}" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="PersonPicture">
+                                <StackPanel Spacing="8">
+                                    <CheckBox Content="IsEnabled" IsChecked="{x:Bind ViewModel.IsPersonPictureEnabled}" />
+                                    <CheckBox Content="IsVisible" IsChecked="{x:Bind ViewModel.IsPersonPictureVisible}" />
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </NavigationView>
     </Grid>
 </Page>

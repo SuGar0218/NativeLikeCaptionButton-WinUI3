@@ -3,7 +3,10 @@ using Microsoft.UI.Xaml;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Text;
 
 using Windows.Graphics;
 using Windows.Win32;
@@ -22,14 +25,42 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
         _hwnd = new HWND(WindowNative.GetWindowHandle(window));
         //_hwndReunionWindowingCaptionControls = PInvoke.FindWindowEx(_hwnd, HWND.Null, "ReunionWindowingCaptionControls", null);
         _nonClientPointerSource = InputNonClientPointerSource.GetForWindowId(window.AppWindow.Id);
-        _regions[NonClientRegionKind.Icon] = [];
-        _regions[NonClientRegionKind.Caption] = [];
-        _regions[NonClientRegionKind.Minimize] = [];
-        _regions[NonClientRegionKind.Maximize] = [];
-        _regions[NonClientRegionKind.Close] = [];
+        //_regions[NonClientRegionKind.Icon] = [];
+        //_regions[NonClientRegionKind.Caption] = [];
+        //_regions[NonClientRegionKind.Minimize] = [];
+        //_regions[NonClientRegionKind.Maximize] = [];
+        //_regions[NonClientRegionKind.Close] = [];
         _regions[NonClientRegionKind.Passthrough] = [];
+        //_dragRegions = [];
         //_subclassProc = HitTestProcedure;
         //PInvoke.SetWindowSubclass(_hwnd, _subclassProc, 1, 0);
+        //_nonClientPointerSource.RegionsChanged += OnRegionsChanged;
+    }
+
+    //private void OnRegionsChanged(InputNonClientPointerSource sender, NonClientRegionsChangedEventArgs args)
+    //{
+    //    foreach (RectInt32 rect in _nonClientPointerSource.GetRegionRects(NonClientRegionKind.Maximize))
+    //    {
+    //        if (!_regions[NonClientRegionKind.Maximize].Values.Contains(rect))
+    //        {
+    //            Apply(NonClientRegionKind.Maximize);
+    //            return;
+    //        }
+    //    }
+    //}
+
+    //public TitleBarNonClientRegionHelper AddDragRegion(params UIElement[] elements)
+    //{
+    //    foreach (UIElement element in elements)
+    //    {
+    //        _dragRegions.Add(element, default);
+    //    }
+    //    return this;
+    //}
+
+    public TitleBarNonClientRegionHelper AddDragRegion(IEnumerable<UIElement> elements)
+    {
+        return AddDragRegion([..elements]);
     }
 
     public TitleBarNonClientRegionHelper Add(NonClientRegionKind kind, params UIElement[] elements)
@@ -60,11 +91,24 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
         return Remove(kind, [..elements]);
     }
 
+    //public TitleBarNonClientRegionHelper RefreshDragRegions()
+    //{
+    //    foreach (UIElement element in _dragRegions.Keys)
+    //    {
+    //        GeneralTransformHelper generalTransformHelper = new(element);
+    //        _dragRegions[element] = generalTransformHelper.GetPixelRect(generalTransformHelper.GetRegionRect());
+    //    }
+    //    return this;
+    //}
+
     public TitleBarNonClientRegionHelper Refresh(params NonClientRegionKind[] kinds)
     {
         foreach (NonClientRegionKind kind in kinds)
         {
-            foreach (UIElement element in _regions[kind].Keys)
+            if (!_regions.TryGetValue(kind, out Dictionary<UIElement, RectInt32> rects))
+                continue;
+
+            foreach (UIElement element in rects.Keys)
             {
                 GeneralTransformHelper generalTransformHelper = new(element);
                 _regions[kind][element] = generalTransformHelper.GetPixelRect(generalTransformHelper.GetRegionRect());
@@ -72,6 +116,12 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
         }
         return this;
     }
+
+    //public TitleBarNonClientRegionHelper ClearDragRegions()
+    //{
+    //    _dragRegions.Clear();
+    //    return this;
+    //}
 
     public TitleBarNonClientRegionHelper Clear(params NonClientRegionKind[] kinds)
     {
@@ -85,9 +135,9 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
 
     public void Apply(params NonClientRegionKind[] kinds)
     {
+        //_window.AppWindow.TitleBar.SetDragRectangles([.. _dragRegions.Values]);
         foreach (NonClientRegionKind kind in kinds)
         {
-            _nonClientPointerSource.ClearRegionRects(kind);
             _nonClientPointerSource.SetRegionRects(kind, [.. _regions[kind].Values]);
         }
     }
@@ -118,6 +168,8 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
     private readonly HWND _hwnd;
 
     //private readonly HWND _hwndReunionWindowingCaptionControls;
+
+    //private readonly Dictionary<UIElement, RectInt32> _dragRegions;
 
     private readonly Dictionary<NonClientRegionKind, Dictionary<UIElement, RectInt32>> _regions = [];
 

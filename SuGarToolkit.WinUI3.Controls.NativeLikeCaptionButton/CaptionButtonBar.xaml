@@ -31,7 +31,10 @@
                                     IsEnabled="{TemplateBinding IsMaximizeButtonEnabled}"
                                     Visibility="Visible" />
                             </Grid>
-                            <local:CaptionCloseButton x:Name="CloseButton" IsEnabled="{TemplateBinding IsCloseButtonEnabled}" />
+                            <local:CaptionCloseButton
+                                x:Name="CloseButton"
+                                IsEnabled="{TemplateBinding IsCloseButtonEnabled}"
+                                Visibility="{TemplateBinding CloseButtonVisibility}" />
                         </StackPanel>
 
                         <VisualStateManager.VisualStateGroups>

@@ -6,7 +6,7 @@ using SuGarToolkit.WinUI3.SourceGenerators;
 
 namespace SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton;
 
-[TemplateVisualState(GroupName = "CommonStates", Name = "PointerExit")]
+[TemplateVisualState(GroupName = "CommonStates", Name = "Normal")]
 [TemplateVisualState(GroupName = "CommonStates", Name = "PointerOver")]
 [TemplateVisualState(GroupName = "CommonStates", Name = "PointerPressed")]
 public partial class CaptionButton : Button
@@ -30,7 +30,7 @@ public partial class CaptionButton : Button
     protected override void OnPointerExited(PointerRoutedEventArgs e)
     {
         base.OnPointerExited(e);
-        VisualStateManager.GoToState(this, "PointerExit", false);
+        VisualStateManager.GoToState(this, "Normal", false);
     }
 
     protected override void OnPointerPressed(PointerRoutedEventArgs e)

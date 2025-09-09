@@ -33,13 +33,16 @@
                                 x:Name="BackButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
-                                Style="{ThemeResource TitleBarBackButtonStyle}" />
+                                IsEnabled="{TemplateBinding IsBackButtonEnabled}"
+                                Style="{ThemeResource TitleBarBackButtonStyle}"
+                                Visibility="{TemplateBinding BackButtonVisibility}" />
                             <Button
                                 x:Name="PaneToggleButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
-                                Style="{ThemeResource TitleBarPaneToggleButtonStyle}" />
-                            <Rectangle Width="{ThemeResource TitleBarLeftHeaderPaddingWidth}" />
+                                IsEnabled="{TemplateBinding IsPaneToggleButtonEnabled}"
+                                Style="{StaticResource TitleBarPaneToggleButtonStyle}"
+                                Visibility="{TemplateBinding PaneToggleButtonVisibility}" />
                             <ContentControl
                                 x:Name="CustomHeaderArea"
                                 VerticalAlignment="Stretch"
