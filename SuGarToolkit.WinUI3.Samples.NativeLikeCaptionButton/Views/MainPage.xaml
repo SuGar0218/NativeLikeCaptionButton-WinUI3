@@ -39,7 +39,7 @@
             MaximizeButtonVisibility="{x:Bind ViewModel.IsMaxmizeButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
             MinimizeButtonVisibility="{x:Bind ViewModel.IsMinmizeButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
             OwnerWindow="{x:Bind OwnerWindow, Mode=OneTime}"
-            PaneToggleButtonClick="TitleBarArea_PaneToggleButtonClick"
+            PaneToggleButtonClick="TitleBarAreaPaneToggleButtonClick"
             PaneToggleButtonVisibility="{x:Bind ViewModel.IsPaneToggleButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <my:NativeLikeTitleBar.CustomHeader>
@@ -124,6 +124,7 @@
                         </my:CaptionButton.Flyout>
                     </my:CaptionButton>
                     <my:CaptionButton
+                        Click="FullScreenButtonClick"
                         VerticalAlignment="Stretch"
                         IsEnabled="{x:Bind ViewModel.IsFullScreenButtonEnabled}"
                         Visibility="{x:Bind ViewModel.IsFullScreenButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">

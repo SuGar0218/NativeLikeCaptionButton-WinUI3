@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 using System;
 using System.Collections.Generic;
@@ -57,8 +58,15 @@ internal partial class TitleBarPassthroughHelper
     {
         foreach (UIElement element in _passthroughRegions.Keys)
         {
-            GeneralTransformHelper generalTransformHelper = new(element);
-            _passthroughRegions[element] = generalTransformHelper.GetPixelRect(generalTransformHelper.GetRegionRect());
+            if (element.Visibility is not Visibility.Visible)
+            {
+                _passthroughRegions[element] = new RectInt32(0, 0, 0, 0);
+            }
+            else
+            {
+                GeneralTransformHelper generalTransformHelper = new(element);
+                _passthroughRegions[element] = generalTransformHelper.GetPixelRect(generalTransformHelper.GetRegionRect());
+            }
         }
         return this;
     }

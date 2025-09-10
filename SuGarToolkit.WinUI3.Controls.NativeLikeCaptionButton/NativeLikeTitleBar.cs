@@ -131,7 +131,7 @@ public partial class NativeLikeTitleBar : ContentControl
         OwnerWindow.SetTitleBar(this);
         titleBarPassthroughHelper = new TitleBarPassthroughHelper(OwnerWindow);
         CollectNonClientRegionPassthroughHitTestVisibleElements(this);
-        titleBarPassthroughHelper.Add(BackButton, PaneToggleButton, CaptionButtonBar).Refresh().Apply();
+        titleBarPassthroughHelper.Refresh().Apply();
     }
 
     private void CollectNonClientRegionPassthroughHitTestVisibleElements(DependencyObject parent)
@@ -153,8 +153,6 @@ public partial class NativeLikeTitleBar : ContentControl
             CollectNonClientRegionPassthroughHitTestVisibleElements(dependencyObject);
         }
     }
-
-    private bool hasPartSizeChanged;
 
     private void OnSizeChanged(object sender, SizeChangedEventArgs e)
     {

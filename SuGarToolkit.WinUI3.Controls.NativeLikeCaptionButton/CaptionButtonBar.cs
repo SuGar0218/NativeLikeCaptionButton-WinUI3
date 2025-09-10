@@ -16,6 +16,8 @@ namespace SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton;
 [TemplatePart(Name = nameof(RestoreButton), Type = typeof(CaptionRestoreButton))]
 [TemplatePart(Name = nameof(CloseButton), Type = typeof(CaptionCloseButton))]
 [TemplatePart(Name = nameof(MaximizeAndRestoreButtonArea), Type = typeof(UIElement))]
+[TemplateVisualState(GroupName = "WindowStates", Name = "WindowRestored")]
+[TemplateVisualState(GroupName = "WindowStates", Name = "WindowMaximized")]
 public partial class CaptionButtonBar : Control
 {
     public CaptionButtonBar()
@@ -47,7 +49,7 @@ public partial class CaptionButtonBar : Control
     [DependencyProperty(PropertyChanged = nameof(OnOwnerWindowDependencyPropertyChanged))]
     public partial Window? OwnerWindow { get; set; }
 
-    private OverlappedPresenter? OwnerWindowPresenter { get; set; }
+    //private OverlappedPresenter? OwnerWindowPresenter => OwnerWindow?.AppWindow.Presenter as OverlappedPresenter;
 
     public event TypedEventHandler<CaptionButtonBar, EventArgs>? MinimizeButtonClick;
     public event TypedEventHandler<CaptionButtonBar, EventArgs>? MaximizeButtonClick;
@@ -79,19 +81,37 @@ public partial class CaptionButtonBar : Control
     private void OnMinimizeButtonClicked(object sender, RoutedEventArgs e)
     {
         MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
-        OwnerWindowPresenter?.Minimize();
+        if (OwnerWindow?.AppWindow.Presenter.Kind is AppWindowPresenterKind.Overlapped)
+        {
+            ((OverlappedPresenter) OwnerWindow.AppWindow.Presenter).Minimize();
+        }
     }
 
     private void OnMaximizeButtonClicked(object sender, RoutedEventArgs e)
     {
         MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
-        OwnerWindowPresenter?.Maximize();
+        if (OwnerWindow?.AppWindow.Presenter.Kind is AppWindowPresenterKind.Overlapped)
+        {
+            ((OverlappedPresenter) OwnerWindow.AppWindow.Presenter).Maximize();
+        }
     }
 
     private void OnRestoreButtonClicked(object sender, RoutedEventArgs e)
     {
         MinimizeButtonClick?.Invoke(this, EventArgs.Empty);
-        OwnerWindowPresenter?.Restore();
+
+        if (OwnerWindow is null)
+            return;
+
+        if (OwnerWindow.AppWindow.Presenter.Kind is AppWindowPresenterKind.Overlapped)
+        {
+            ((OverlappedPresenter) OwnerWindow.AppWindow.Presenter).Restore();
+        }
+        else if (OwnerWindow.AppWindow.Presenter.Kind is AppWindowPresenterKind.FullScreen)
+        {
+            OwnerWindow.AppWindow.SetPresenter(AppWindowPresenterKind.Overlapped);
+            ((OverlappedPresenter) OwnerWindow.AppWindow.Presenter).Restore();
+        }
     }
 
     private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
@@ -102,19 +122,17 @@ public partial class CaptionButtonBar : Control
 
     private void OnOwnerWindowChanging(Window oldValue, Window newValue)
     {
-        OwnerWindowPresenter = null;
         if (oldValue is not null)
         {
-            oldValue.AppWindow.Changed -= OnOwnerAppWindowStateChanged;
             oldValue.Activated -= OnOwnerWindowActivated;
+            oldValue.AppWindow.Changed -= OnOwnerAppWindowStateChanged;
         }
 
-        if (newValue is null || newValue.AppWindow.Presenter.Kind is not AppWindowPresenterKind.Overlapped)
-            return;
-
-        OwnerWindowPresenter = (OverlappedPresenter) newValue.AppWindow.Presenter;
-        newValue.AppWindow.Changed += OnOwnerAppWindowStateChanged;
-        newValue.Activated += OnOwnerWindowActivated;
+        if (newValue is not null)
+        {
+            newValue.Activated += OnOwnerWindowActivated;
+            newValue.AppWindow.Changed += OnOwnerAppWindowStateChanged;
+        }
     }
 
     private void OnOwnerWindowActivated(object sender, WindowActivatedEventArgs args)
@@ -137,18 +155,51 @@ public partial class CaptionButtonBar : Control
 
     private void OnOwnerAppWindowStateChanged(AppWindow sender, AppWindowChangedEventArgs args)
     {
-        if (args.DidSizeChange)
+        if (args.DidPresenterChange)
         {
-            switch (OwnerWindowPresenter!.State)
+            switch (sender.Presenter.Kind)
             {
-                case OverlappedPresenterState.Maximized:
+                case AppWindowPresenterKind.Default:
+                    break;
+                case AppWindowPresenterKind.CompactOverlay:
+                    break;
+                case AppWindowPresenterKind.FullScreen:
                     VisualStateManager.GoToState(this, "WindowMaximized", false);
                     break;
-                case OverlappedPresenterState.Restored:
-                    VisualStateManager.GoToState(this, "WindowRestored", false);
+                case AppWindowPresenterKind.Overlapped:
+                    switch (((OverlappedPresenter) sender.Presenter).State)
+                    {
+                        case OverlappedPresenterState.Maximized:
+                            VisualStateManager.GoToState(this, "WindowMaximized", false);
+                            break;
+                        case OverlappedPresenterState.Minimized:
+                            break;
+                        case OverlappedPresenterState.Restored:
+                            VisualStateManager.GoToState(this, "WindowRestored", false);
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+        else
+        {
+            if (args.DidSizeChange && sender.Presenter.Kind is AppWindowPresenterKind.Overlapped)
+            {
+                switch (((OverlappedPresenter) sender.Presenter).State)
+                {
+                    case OverlappedPresenterState.Maximized:
+                        VisualStateManager.GoToState(this, "WindowMaximized", false);
+                        break;
+                    case OverlappedPresenterState.Restored:
+                        VisualStateManager.GoToState(this, "WindowRestored", false);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -161,16 +212,16 @@ public partial class CaptionButtonBar : Control
     private static void OnMinimizableDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         CaptionButtonBar self = (CaptionButtonBar) d;
-        if (self.OwnerWindowPresenter is null)
+        if (self.OwnerWindow?.AppWindow.Presenter.Kind is not AppWindowPresenterKind.Overlapped)
             return;
-        self.OwnerWindowPresenter.IsMinimizable = self.IsMinimizeButtonEnabled && self.MinimizeButtonVisibility is Visibility.Visible;
+        ((OverlappedPresenter) self.OwnerWindow.AppWindow.Presenter).IsMinimizable = self.IsMinimizeButtonEnabled && self.MinimizeButtonVisibility is Visibility.Visible;
     }
 
     private static void OnMaximizableDependencyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         CaptionButtonBar self = (CaptionButtonBar) d;
-        if (self.OwnerWindowPresenter is null)
+        if (self.OwnerWindow?.AppWindow.Presenter.Kind is not AppWindowPresenterKind.Overlapped)
             return;
-        self.OwnerWindowPresenter.IsMaximizable = self.IsMaximizeButtonEnabled && self.MaximizeButtonVisibility is Visibility.Visible;
+        ((OverlappedPresenter) self.OwnerWindow.AppWindow.Presenter).IsMaximizable = self.IsMaximizeButtonEnabled && self.MaximizeButtonVisibility is Visibility.Visible;
     }
 }

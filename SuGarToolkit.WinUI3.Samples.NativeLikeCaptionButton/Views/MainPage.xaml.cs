@@ -2,6 +2,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
+using Microsoft.UI.Windowing;
+
 using SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.ViewModels;
 
 namespace SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.Views;
@@ -33,8 +35,20 @@ internal sealed partial class MainPage : Page
 
     private Window OwnerWindow { get; set; }
 
-    private void TitleBarArea_PaneToggleButtonClick(Controls.NativeLikeCaptionButton.NativeLikeTitleBar sender, System.EventArgs args)
+    private void TitleBarAreaPaneToggleButtonClick(Controls.NativeLikeCaptionButton.NativeLikeTitleBar sender, System.EventArgs args)
     {
         RootNavigationView.IsPaneOpen = !RootNavigationView.IsPaneOpen;
+    }
+
+    private void FullScreenButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (OwnerWindow.AppWindow.Presenter.Kind is AppWindowPresenterKind.Overlapped)
+        {
+            OwnerWindow.AppWindow.SetPresenter(AppWindowPresenterKind.FullScreen);
+        }
+        else
+        {
+            OwnerWindow.AppWindow.SetPresenter(AppWindowPresenterKind.Overlapped);
+        }
     }
 }

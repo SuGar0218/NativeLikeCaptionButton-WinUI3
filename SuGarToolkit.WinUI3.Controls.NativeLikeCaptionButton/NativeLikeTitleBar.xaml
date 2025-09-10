@@ -33,6 +33,7 @@
                                 x:Name="BackButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
+                                local:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
                                 IsEnabled="{TemplateBinding IsBackButtonEnabled}"
                                 Style="{ThemeResource TitleBarBackButtonStyle}"
                                 Visibility="{TemplateBinding BackButtonVisibility}" />
@@ -40,6 +41,7 @@
                                 x:Name="PaneToggleButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
+                                local:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
                                 IsEnabled="{TemplateBinding IsPaneToggleButtonEnabled}"
                                 Style="{StaticResource TitleBarPaneToggleButtonStyle}"
                                 Visibility="{TemplateBinding PaneToggleButtonVisibility}" />
@@ -70,6 +72,7 @@
                                 x:Name="CaptionButtonBar"
                                 MinHeight="0"
                                 VerticalAlignment="Stretch"
+                                local:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
                                 CloseButtonVisibility="{TemplateBinding CloseButtonVisibility}"
                                 IsCloseButtonEnabled="{TemplateBinding IsCloseButtonEnabled}"
                                 IsMaximizeButtonEnabled="{TemplateBinding IsMaximizeButtonEnabled}"
