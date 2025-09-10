@@ -7,6 +7,13 @@
 		<UseWinUI>true</UseWinUI>
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RepositoryUrl>https://github.com/SuGar0218/NativeLikeCaptionButton-WinUI3</RepositoryUrl>
+		<Description>Provides flexible and customizable title bar for WinUI 3 in Windows 11 native UWP style.</Description>
+		<Version>1.0.0-dev</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="CaptionButton.xaml" />
@@ -33,6 +40,12 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\SuGarToolkit.WinUI3.SourceGenerators.RelayDependencyPropertyGenerator\SuGarToolkit.WinUI3.SourceGenerators.RelayDependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	  <ProjectReference Include="..\SuGarToolkit.WinUI3.SourceGenerators.DependencyPropertyGenerator\SuGarToolkit.WinUI3.SourceGenerators.DependencyPropertyGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="NativeLikeTitleBar_themeresource.xaml">

@@ -1,8 +1,7 @@
+﻿using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-
-using Microsoft.UI.Windowing;
 
 using SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.ViewModels;
 

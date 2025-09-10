@@ -1,10 +1,9 @@
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 using SuGarToolkit.WinUI3.SourceGenerators;
 
 using System;
-using System.ComponentModel;
 
 using Windows.Foundation;
 

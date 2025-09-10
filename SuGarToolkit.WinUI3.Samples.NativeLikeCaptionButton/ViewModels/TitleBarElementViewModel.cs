@@ -1,11 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SuGarToolkit.WinUI3.Samples.NativeLikeCaptionButton.ViewModels;
 
 internal partial class TitleBarElementViewModel : ObservableObject

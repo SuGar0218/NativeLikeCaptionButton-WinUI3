@@ -1,20 +1,9 @@
 ﻿using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 
 using Windows.Graphics;
-using Windows.Win32;
-using Windows.Win32.Foundation;
-using Windows.Win32.UI.Shell;
-
-using WinRT.Interop;
 
 namespace SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton.Helpers;
 
@@ -28,7 +17,7 @@ internal partial class TitleBarPassthroughHelper
 
     public TitleBarPassthroughHelper AddDragRegion(IEnumerable<UIElement> elements)
     {
-        return AddDragRegion([..elements]);
+        return AddDragRegion([.. elements]);
     }
 
     public TitleBarPassthroughHelper Add(params UIElement[] elements)
@@ -42,7 +31,7 @@ internal partial class TitleBarPassthroughHelper
 
     public TitleBarPassthroughHelper Add(NonClientRegionKind kind, IEnumerable<UIElement> elements)
     {
-        return Add(kind, [..elements]);
+        return Add(kind, [.. elements]);
     }
 
     public TitleBarPassthroughHelper Remove(params UIElement[] elements)

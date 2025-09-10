@@ -1,17 +1,10 @@
 ﻿using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 
 using Windows.Graphics;
-using Windows.Win32;
 using Windows.Win32.Foundation;
-using Windows.Win32.UI.Shell;
 
 using WinRT.Interop;
 
@@ -60,7 +53,7 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
 
     public TitleBarNonClientRegionHelper AddDragRegion(IEnumerable<UIElement> elements)
     {
-        return AddDragRegion([..elements]);
+        return AddDragRegion([.. elements]);
     }
 
     public TitleBarNonClientRegionHelper Add(NonClientRegionKind kind, params UIElement[] elements)
@@ -74,7 +67,7 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
 
     public TitleBarNonClientRegionHelper Add(NonClientRegionKind kind, IEnumerable<UIElement> elements)
     {
-        return Add(kind, [..elements]);
+        return Add(kind, [.. elements]);
     }
 
     public TitleBarNonClientRegionHelper Remove(NonClientRegionKind kind, params UIElement[] elements)
@@ -88,7 +81,7 @@ internal partial class TitleBarNonClientRegionHelper// : IDisposable
 
     public TitleBarNonClientRegionHelper Remove(NonClientRegionKind kind, IEnumerable<UIElement> elements)
     {
-        return Remove(kind, [..elements]);
+        return Remove(kind, [.. elements]);
     }
 
     //public TitleBarNonClientRegionHelper RefreshDragRegions()
