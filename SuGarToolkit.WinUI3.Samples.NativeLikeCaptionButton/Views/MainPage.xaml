@@ -43,17 +43,20 @@
             PaneToggleButtonVisibility="{x:Bind ViewModel.IsPaneToggleButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <my:NativeLikeTitleBar.CustomHeader>
-                <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-                    <StackPanel.ChildrenTransitions>
-                        <RepositionThemeTransition />
-                    </StackPanel.ChildrenTransitions>
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     <TextBlock
+                        Grid.Column="0"
                         Padding="8,0"
                         VerticalAlignment="Center"
                         Style="{ThemeResource CaptionTextBlockStyle}"
                         Text="NativeLikeTitleBar"
                         Visibility="{x:Bind ViewModel.IsCaptionTextVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                     <MenuBar
+                        Grid.Column="1"
                         VerticalAlignment="Center"
                         my:NativeLikeTitleBar.IsHitTestVisibleInTitleBar="True"
                         IsEnabled="{x:Bind ViewModel.IsMenuBarEnabled}"
@@ -79,7 +82,7 @@
                             </MenuBarItem.Items>
                         </MenuBarItem>
                     </MenuBar>
-                </StackPanel>
+                </Grid>
             </my:NativeLikeTitleBar.CustomHeader>
 
             <my:NativeLikeTitleBar.CustomFooter>

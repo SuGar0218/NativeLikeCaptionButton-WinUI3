@@ -21,15 +21,20 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel
+                        <Grid
                             x:Name="HeaderArea"
                             Grid.Column="0"
                             Margin="{StaticResource NativeLikeTitleBarButtonAreaMargin}"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Orientation="Horizontal"
-                            Spacing="{StaticResource NativeLikeTitleBarButtonSpacing}">
+                            ColumnSpacing="{StaticResource NativeLikeTitleBarButtonSpacing}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <Button
+                                Grid.Column="0"
                                 x:Name="BackButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
@@ -38,6 +43,7 @@
                                 Style="{ThemeResource TitleBarBackButtonStyle}"
                                 Visibility="{TemplateBinding BackButtonVisibility}" />
                             <Button
+                                Grid.Column="1"
                                 x:Name="PaneToggleButton"
                                 Width="{StaticResource NativeLikeTitleBarButtonWidth}"
                                 Margin="0"
@@ -46,29 +52,35 @@
                                 Style="{StaticResource TitleBarPaneToggleButtonStyle}"
                                 Visibility="{TemplateBinding PaneToggleButtonVisibility}" />
                             <ContentControl
+                                Grid.Column="2"
                                 x:Name="CustomHeaderArea"
                                 VerticalAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
                                 Content="{TemplateBinding CustomHeader}" />
-                        </StackPanel>
+                        </Grid>
                         <ContentPresenter
                             x:Name="CenterArea"
                             Grid.Column="1"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Stretch"
                             Content="{TemplateBinding Content}" />
-                        <StackPanel
+                        <Grid
                             x:Name="FooterArea"
                             Grid.Column="2"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Orientation="Horizontal">
+                            VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
                             <ContentControl
+                                Grid.Column="0"
                                 x:Name="CustomFooterArea"
                                 VerticalAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
                                 Content="{TemplateBinding CustomFooter}" />
                             <local:CaptionButtonBar
+                                Grid.Column="1"
                                 x:Name="CaptionButtonBar"
                                 MinHeight="0"
                                 VerticalAlignment="Stretch"
@@ -80,7 +92,7 @@
                                 MaximizeButtonVisibility="{TemplateBinding MaximizeButtonVisibility}"
                                 MinimizeButtonVisibility="{TemplateBinding MinimizeButtonVisibility}"
                                 OwnerWindow="{TemplateBinding OwnerWindow}" />
-                        </StackPanel>
+                        </Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ActiveStates">
                                 <VisualState x:Name="Active" />
