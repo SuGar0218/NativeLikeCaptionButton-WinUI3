@@ -127,8 +127,8 @@
                         </my:CaptionButton.Flyout>
                     </my:CaptionButton>
                     <my:CaptionButton
-                        Click="FullScreenButtonClick"
                         VerticalAlignment="Stretch"
+                        Click="FullScreenButtonClick"
                         IsEnabled="{x:Bind ViewModel.IsFullScreenButtonEnabled}"
                         Visibility="{x:Bind ViewModel.IsFullScreenButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <FontIcon FontSize="{StaticResource CaptionTextBlockFontSize}" Glyph="&#xE740;" />

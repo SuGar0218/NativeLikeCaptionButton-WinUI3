@@ -8,7 +8,7 @@
     <x:String x:Key="CaptionMaximizeButtonGlyph">&#xE922;</x:String>
     <x:String x:Key="CaptionRestoryButtonGlyph">&#xE923;</x:String>
     <x:String x:Key="CaptionCloseButtonGlyph">&#xE8BB;</x:String>
-    <x:Double x:Key="CaptionButtonWidth">48</x:Double>
+    <x:Double x:Key="CaptionButtonWidth">47</x:Double>
     <x:Double x:Key="CaptionButtonIconFontSize">10</x:Double>
     <x:Double x:Key="CaptionButtonInactiveOpacity">0.382</x:Double>
 

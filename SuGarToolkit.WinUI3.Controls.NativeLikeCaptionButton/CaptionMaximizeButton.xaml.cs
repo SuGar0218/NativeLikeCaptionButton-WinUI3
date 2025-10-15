@@ -1,5 +1,4 @@
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using SuGarToolkit.WinUI3.SourceGenerators;
 
 namespace SuGarToolkit.WinUI3.Controls.NativeLikeCaptionButton;
 
@@ -9,4 +8,7 @@ public partial class CaptionMaximizeButton : CaptionButton
     {
         InitializeComponent();
     }
+
+    [DependencyProperty]
+    public partial bool IsRestoreButton { get; set; }
 }

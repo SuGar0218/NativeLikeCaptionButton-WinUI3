@@ -11,14 +11,14 @@ internal partial class TitleBarPassthroughHelper
 {
     public TitleBarPassthroughHelper(Window window)
     {
-        _nonClientPointerSource = InputNonClientPointerSource.GetForWindowId(window.AppWindow.Id);
+        _inputNonClientPointerSource = InputNonClientPointerSource.GetForWindowId(window.AppWindow.Id);
         _passthroughRegions = [];
     }
 
-    public TitleBarPassthroughHelper AddDragRegion(IEnumerable<UIElement> elements)
-    {
-        return AddDragRegion([.. elements]);
-    }
+    //public TitleBarPassthroughHelper AddDragRegion(IEnumerable<UIElement> elements)
+    //{
+    //    return AddDragRegion([.. elements]);
+    //}
 
     public TitleBarPassthroughHelper Add(params UIElement[] elements)
     {
@@ -68,10 +68,10 @@ internal partial class TitleBarPassthroughHelper
 
     public void Apply()
     {
-        _nonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [.. _passthroughRegions.Values]);
+        _inputNonClientPointerSource.SetRegionRects(NonClientRegionKind.Passthrough, [.. _passthroughRegions.Values]);
     }
 
     private readonly Dictionary<UIElement, RectInt32> _passthroughRegions;
 
-    private InputNonClientPointerSource _nonClientPointerSource;
+    private readonly InputNonClientPointerSource _inputNonClientPointerSource;
 }
